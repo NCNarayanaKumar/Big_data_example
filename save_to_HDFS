@@ -1,0 +1,23 @@
+DATA = LOAD '/user/pigdata/loadfile4' USING PigStorage(',') AS
+(
+ userid:  int,
+ movieid:  int,
+ rating:  float,
+ time:  int
+);
+ 
+ 
+DATA_GROUPED = GROUP DATA BY movieid;
+ 
+ 
+RESULT = FOREACH DATA_GROUPED  {
+ 
+ GENERATE 
+   group ,
+          AVG(DATA.rating) as sonuc;
+}
+
+A = ORDER RESULT BY sonuc DESC;
+ABC = LIMIT A 500;
+
+STORE ABC INTO '/user/pigdata/sonuc3' using PigStorage(',');
